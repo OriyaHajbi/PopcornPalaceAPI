@@ -5,7 +5,6 @@ import {
   IsInt,
   IsNotEmpty,
   IsPositive,
-  IsString,
   Validate,
 } from 'class-validator';
 import { IsEndTimeAfterStartTimeConstraint } from 'src/validator/isEndAfterStartTime';
@@ -17,9 +16,9 @@ export class CreateShowtimeDto {
   @IsNotEmpty()
   movieId: number;
 
-  @IsString()
-  @IsNotEmpty()
-  theater: string;
+  @IsInt()
+  @IsPositive()
+  theaterId: number;
 
   @Type(() => Date)
   @IsDate()

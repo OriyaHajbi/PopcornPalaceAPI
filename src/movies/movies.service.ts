@@ -48,9 +48,7 @@ export class MoviesService {
     return movie;
   }
 
-  async removeByTitle(title: string): Promise<{ message: string }> {
-    console.log(title);
-
+  async removeByTitle(title: string) {
     const movie = await this.moviesRepository.findOne({
       where: { title: ILike(title) }, // case-insensitive search
     });
@@ -60,14 +58,9 @@ export class MoviesService {
     }
 
     await this.moviesRepository.remove(movie);
-
-    return { message: `Movie "${movie.title}" has been deleted.` };
   }
 
-  async updateByTitle(
-    title: string,
-    updateDto: UpdateMovieDto,
-  ): Promise<Movie> {
+  async updateByTitle(title: string, updateDto: UpdateMovieDto) {
     const cleanTitle = title.trim().toLowerCase();
     console.log(cleanTitle);
     console.log(updateDto);
@@ -81,7 +74,7 @@ export class MoviesService {
     }
 
     Object.assign(movie, updateDto);
-    return await this.moviesRepository.save(movie);
+    await this.moviesRepository.save(movie);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

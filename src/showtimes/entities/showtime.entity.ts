@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
+import { Booking } from 'src/booking/entities/booking.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
+import { Theater } from 'src/theater/entities/theater.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,8 +16,11 @@ export class Showtime {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  theater: string; // Theater name
+  @ManyToOne(() => Theater, (theater) => theater.showtimes, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  theater: Theater;
 
   @Column()
   startTime: Date;
@@ -30,4 +36,7 @@ export class Showtime {
   })
   @JoinColumn({ name: 'movieId' })
   movie: Movie;
+
+  @OneToMany(() => Booking, (booking) => booking.showtime)
+  tickets: Booking[];
 }

@@ -10,6 +10,7 @@ import { Showtime } from './entities/showtime.entity';
 import { LessThan, MoreThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from 'src/movies/entities/movie.entity';
+import { Theater } from 'src/theater/entities/theater.entity';
 
 @Injectable()
 export class ShowtimesService {
@@ -18,34 +19,40 @@ export class ShowtimesService {
     private readonly showtimesRepository: Repository<Showtime>,
     @InjectRepository(Movie)
     private readonly moviesRepository: Repository<Movie>,
+    @InjectRepository(Theater)
+    private readonly theaterRepository: Repository<Theater>,
   ) {}
 
   async create(createShowtimeDto: CreateShowtimeDto) {
-    const { movieId, theater, startTime, endTime, price } = createShowtimeDto;
-    const movie = await this.moviesRepository.findOne({
-      where: { id: movieId },
-    });
+    const { movieId, theaterId, startTime, endTime, price } = createShowtimeDto;
+    // const movie = await this.moviesRepository.findOne({
+    //   where: { id: movieId },
+    // });
+    const movie = this.moviesRepository.create({ id: movieId });
+
+    // const theater = await this.theaterRepository.findOne({
+    //   where: { id: theaterId },
+    // });
+    const theater = this.theaterRepository.create({ id: theaterId });
 
     console.log(movie);
-    if (!movie) {
-      throw new NotFoundException('Movie not found');
+    if (!movie || !theater) {
+      throw new NotFoundException('Movie or Theater not found');
     }
     // need to add logic
     // Check for overlapping showtimes
     const overlappingShowtime = await this.showtimesRepository.findOne({
       where: {
-        theater,
-        movie,
-        startTime: MoreThan(endTime),
-        endTime: LessThan(startTime),
+        theater: { id: theaterId },
+        movie: { id: movieId },
+        startTime: LessThan(endTime),
+        endTime: MoreThan(startTime),
       },
     });
-    console.log(overlappingShowtime);
 
     if (overlappingShowtime) {
       throw new ConflictException('There is an overlapping showtime');
     }
-    console.log('After Overlapping');
 
     const showtime = this.showtimesRepository.create({
       movie, // Movie entity, not just the movieId
@@ -54,7 +61,15 @@ export class ShowtimesService {
       endTime,
       price,
     });
-    return await this.showtimesRepository.save(showtime);
+    const saved = await this.showtimesRepository.save(showtime);
+    return {
+      id: saved.id,
+      price: saved.price,
+      movieId: movie.id,
+      theater: theater.name,
+      startTime: saved.startTime,
+      endTime: saved.endTime,
+    };
   }
 
   async findAll() {
