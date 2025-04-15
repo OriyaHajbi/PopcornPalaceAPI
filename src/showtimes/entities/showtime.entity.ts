@@ -25,7 +25,9 @@ export class Showtime {
   @Column({ type: 'decimal' })
   price: number;
 
-  @ManyToOne(() => Movie, (movie) => movie.showtimes)
+  @ManyToOne(() => Movie, (movie) => movie.showtimes, {
+    onDelete: 'CASCADE', // Delete all showtimes when delete a movie
+  })
   @JoinColumn({ name: 'movieId' })
   movie: Movie;
 }
