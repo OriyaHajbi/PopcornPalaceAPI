@@ -23,12 +23,12 @@ export class CreateShowtimeDto {
 
   @Type(() => Date)
   @IsDate()
-  start_time: Date;
+  startTime: Date;
 
   @Type(() => Date)
   @IsDate()
   @Validate(IsEndTimeAfterStartTimeConstraint) // Use the custom validator
-  end_time: Date;
+  endTime: Date;
 
   @IsPositive()
   @IsNotEmpty()

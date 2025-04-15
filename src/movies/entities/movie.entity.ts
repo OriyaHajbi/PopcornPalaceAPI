@@ -20,7 +20,7 @@ export class Movie {
   rating: number;
 
   @Column()
-  release_year: number;
+  releaseYear: number;
 
   @OneToMany(() => Showtime, (showtime) => showtime.movie)
   showtimes: Showtime[];

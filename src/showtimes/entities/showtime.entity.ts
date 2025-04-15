@@ -17,10 +17,10 @@ export class Showtime {
   theater: string; // Theater name
 
   @Column()
-  start_time: Date;
+  startTime: Date;
 
   @Column()
-  end_time: Date;
+  endTime: Date;
 
   @Column({ type: 'decimal' })
   price: number;

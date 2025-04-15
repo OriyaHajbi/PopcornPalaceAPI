@@ -21,7 +21,7 @@ export class ShowtimesService {
   ) {}
 
   async create(createShowtimeDto: CreateShowtimeDto) {
-    const { movieId, theater, start_time, end_time, price } = createShowtimeDto;
+    const { movieId, theater, startTime, endTime, price } = createShowtimeDto;
     const movie = await this.moviesRepository.findOne({
       where: { id: movieId },
     });
@@ -36,8 +36,8 @@ export class ShowtimesService {
       where: {
         theater,
         movie,
-        start_time: MoreThan(end_time),
-        end_time: LessThan(start_time),
+        startTime: MoreThan(endTime),
+        endTime: LessThan(startTime),
       },
     });
     console.log(overlappingShowtime);
@@ -50,8 +50,8 @@ export class ShowtimesService {
     const showtime = this.showtimesRepository.create({
       movie, // Movie entity, not just the movieId
       theater,
-      start_time,
-      end_time,
+      startTime,
+      endTime,
       price,
     });
     return await this.showtimesRepository.save(showtime);
@@ -72,13 +72,23 @@ export class ShowtimesService {
     return showtime;
   }
 
-  async update(id: number, updateShowtimeDto: UpdateShowtimeDto) {
-    const showtime = await this.findOne(id);
+  // async update(id: number, updateShowtimeDto: UpdateShowtimeDto) {
+  //   const showtime = await this.findOne(id);
+
+  //   if (!showtime) {
+  //     throw new NotFoundException(`Showtime with ${id} not found`);
+  //   }
+  //   Object.assign(showtime, updateShowtimeDto);
+  //   return await this.showtimesRepository.save(showtime);
+  // }
+  async update(id: number, updateDto: UpdateShowtimeDto): Promise<Showtime> {
+    const showtime = await this.showtimesRepository.findOne({ where: { id } });
 
     if (!showtime) {
-      throw new NotFoundException(`Showtime with ${id} not found`);
+      throw new NotFoundException(`Showtime with ID ${id} not found`);
     }
-    Object.assign(showtime, updateShowtimeDto);
+
+    Object.assign(showtime, updateDto);
     return await this.showtimesRepository.save(showtime);
   }
 

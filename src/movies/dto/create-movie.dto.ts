@@ -19,5 +19,5 @@ export class CreateMovieDto {
 
   @IsInt()
   @IsPositive()
-  release_year: number;
+  releaseYear: number;
 }

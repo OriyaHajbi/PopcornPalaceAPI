@@ -9,10 +9,10 @@ import {
 export class IsEndTimeAfterStartTimeConstraint
   implements ValidatorConstraintInterface
 {
-  validate(end_time: Date, args: ValidationArguments) {
-    const start_time = (args.object as any).start_time; // Access start_time from the object
-    if (start_time && end_time) {
-      return end_time > start_time; // Ensure end_time is after start_time
+  validate(endTime: Date, args: ValidationArguments) {
+    const startTime = (args.object as any).startTime; // Access start_time from the object
+    if (startTime && endTime) {
+      return endTime > startTime; // Ensure end_time is after start_time
     }
     return true; // If either is not provided, no validation error
   }
