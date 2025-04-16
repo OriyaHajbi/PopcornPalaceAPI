@@ -39,4 +39,23 @@ export class Showtime {
 
   @OneToMany(() => Booking, (booking) => booking.showtime)
   tickets: Booking[];
+
+  @Column('jsonb')
+  seats: {
+    seatNumber: number;
+    isBooked: boolean;
+    bookedBy?: string | null; // UUID of the user who booked
+  }[];
+
+  initializeSeatsFromTheater(theater: Theater) {
+    if (!theater || typeof theater.seatsAmount !== 'number') {
+      throw new Error('Invalid theater data provided');
+    }
+
+    this.seats = Array.from({ length: theater.seatsAmount }, (_, i) => ({
+      seatNumber: i + 1,
+      isBooked: false,
+      bookedBy: null as string | null,
+    }));
+  }
 }

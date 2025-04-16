@@ -33,8 +33,10 @@ export class ShowtimesService {
     // const theater = await this.theaterRepository.findOne({
     //   where: { id: theaterId },
     // });
-    const theater = this.theaterRepository.create({ id: theaterId });
-
+    // const theater = this.theaterRepository.create({ id: theaterId });
+    const theater = await this.theaterRepository.findOne({
+      where: { id: theaterId },
+    });
     console.log(movie);
     if (!movie || !theater) {
       throw new NotFoundException('Movie or Theater not found');
@@ -61,6 +63,10 @@ export class ShowtimesService {
       endTime,
       price,
     });
+
+    // console.log('Fetched Theater:', theater);
+    showtime.initializeSeatsFromTheater(theater);
+
     const saved = await this.showtimesRepository.save(showtime);
     return {
       id: saved.id,

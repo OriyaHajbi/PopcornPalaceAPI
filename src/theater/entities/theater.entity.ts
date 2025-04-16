@@ -13,12 +13,12 @@ export class Theater {
   @Column()
   seatsAmount: number;
 
-  @Column('jsonb')
-  seats: {
-    seatNumber: number;
-    isBooked: boolean;
-    bookedBy?: string | null; // UUID of the user who booked
-  }[];
+  // @Column('jsonb')
+  // seats: {
+  //   seatNumber: number;
+  //   isBooked: boolean;
+  //   bookedBy?: string | null; // UUID of the user who booked
+  // }[];
 
   @OneToMany(() => Showtime, (showtime) => showtime.theater)
   showtimes: Showtime[];
@@ -26,11 +26,11 @@ export class Theater {
   // @OneToMany(() => Booking, (booking) => booking.theater)
   // tickets: Booking[];
 
-  initializeSeats() {
-    this.seats = Array.from({ length: this.seatsAmount }, (_, i) => ({
-      seatNumber: i + 1,
-      isBooked: false,
-      bookedBy: null as string | null, // UUID will go here
-    }));
-  }
+  // initializeSeats() {
+  //   this.seats = Array.from({ length: this.seatsAmount }, (_, i) => ({
+  //     seatNumber: i + 1,
+  //     isBooked: false,
+  //     bookedBy: null as string | null, // UUID will go here
+  //   }));
+  // }
 }

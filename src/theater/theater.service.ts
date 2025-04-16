@@ -15,7 +15,7 @@ export class TheatersService {
 
   async create(dto: CreateTheaterDto): Promise<Theater> {
     const theater = this.theaterRepository.create(dto);
-    theater.initializeSeats();
+    // theater.initializeSeats();
     return await this.theaterRepository.save(theater);
   }
 
