@@ -25,23 +25,17 @@ export class ShowtimesService {
 
   async create(createShowtimeDto: CreateShowtimeDto) {
     const { movieId, theaterId, startTime, endTime, price } = createShowtimeDto;
-    // const movie = await this.moviesRepository.findOne({
-    //   where: { id: movieId },
-    // });
-    const movie = this.moviesRepository.create({ id: movieId });
 
-    // const theater = await this.theaterRepository.findOne({
-    //   where: { id: theaterId },
-    // });
-    // const theater = this.theaterRepository.create({ id: theaterId });
+    // here i need only the movie ID
+    const movie = this.moviesRepository.create({ id: movieId });
+    // here i need the full entity for the initializeSeatsFromTheater function
     const theater = await this.theaterRepository.findOne({
       where: { id: theaterId },
     });
-    console.log(movie);
+
     if (!movie || !theater) {
       throw new NotFoundException('Movie or Theater not found');
     }
-    // need to add logic
     // Check for overlapping showtimes
     const overlappingShowtime = await this.showtimesRepository.findOne({
       where: {
@@ -53,18 +47,19 @@ export class ShowtimesService {
     });
 
     if (overlappingShowtime) {
-      throw new ConflictException('There is an overlapping showtime');
+      throw new ConflictException(
+        `Overlapping showtime: There's already a show scheduled in this theater between ${overlappingShowtime.startTime.toISOString()} and ${overlappingShowtime.endTime.toISOString()}. Your requested time (${startTime.toISOString()} - ${endTime.toISOString()}) conflicts with it.`,
+      );
     }
 
     const showtime = this.showtimesRepository.create({
-      movie, // Movie entity, not just the movieId
+      movie,
       theater,
       startTime,
       endTime,
       price,
     });
 
-    // console.log('Fetched Theater:', theater);
     showtime.initializeSeatsFromTheater(theater);
 
     const saved = await this.showtimesRepository.save(showtime);
@@ -93,16 +88,7 @@ export class ShowtimesService {
     return showtime;
   }
 
-  // async update(id: number, updateShowtimeDto: UpdateShowtimeDto) {
-  //   const showtime = await this.findOne(id);
-
-  //   if (!showtime) {
-  //     throw new NotFoundException(`Showtime with ${id} not found`);
-  //   }
-  //   Object.assign(showtime, updateShowtimeDto);
-  //   return await this.showtimesRepository.save(showtime);
-  // }
-  async update(id: number, updateDto: UpdateShowtimeDto): Promise<Showtime> {
+  async update(id: number, updateDto: UpdateShowtimeDto) {
     const showtime = await this.showtimesRepository.findOne({ where: { id } });
 
     if (!showtime) {
@@ -110,7 +96,7 @@ export class ShowtimesService {
     }
 
     Object.assign(showtime, updateDto);
-    return await this.showtimesRepository.save(showtime);
+    await this.showtimesRepository.save(showtime);
   }
 
   async remove(id: number) {
@@ -119,6 +105,6 @@ export class ShowtimesService {
     if (!showtime) {
       throw new NotFoundException(`Showtime with ${id} not found`);
     }
-    return await this.showtimesRepository.remove(showtime);
+    await this.showtimesRepository.remove(showtime);
   }
 }

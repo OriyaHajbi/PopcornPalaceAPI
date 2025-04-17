@@ -23,36 +23,24 @@ export class ShowtimesController {
     return this.showtimesService.create(createShowtimeDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.showtimesService.findAll();
-  // }
-
   @Get(':id')
   @HttpCode(200)
   findOne(@Param('id') id: string) {
     return this.showtimesService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateShowtimeDto: UpdateShowtimeDto,
-  // ) {
-  //   return this.showtimesService.update(+id, updateShowtimeDto);
-  // }
   @Post('update/:id')
   @HttpCode(200)
   updateShowtime(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateShowtimeDto: UpdateShowtimeDto,
   ) {
-    this.showtimesService.update(id, updateShowtimeDto);
+    return this.showtimesService.update(id, updateShowtimeDto);
   }
 
   @Delete(':id')
   @HttpCode(200)
   remove(@Param('id') id: string) {
-    this.showtimesService.remove(+id);
+    return this.showtimesService.remove(+id);
   }
 }

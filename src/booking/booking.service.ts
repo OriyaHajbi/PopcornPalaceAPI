@@ -38,8 +38,12 @@ export class BookingService {
     const showtime = await this.showtimeRepository.findOne({
       where: { id: showtimeId },
     });
-    if (!showtime || !showtime.seats) {
-      throw new NotFoundException('Showtime or its seats not found');
+    if (!showtime) {
+      throw new NotFoundException('Showtime not found');
+    }
+
+    if (!showtime.seats || showtime.seats.length === 0) {
+      throw new NotFoundException('Showtime has no available seats');
     }
 
     // Step 3: Check if seat is already booked in showtime.seats
@@ -74,26 +78,5 @@ export class BookingService {
     return {
       bookingId: saved.id,
     };
-  }
-
-  // Find all bookings
-  async findAll(): Promise<Booking[]> {
-    return this.bookingRepository.find({
-      relations: ['user', 'showtime'],
-    });
-  }
-
-  // Find booking by ID
-  async findOne(id: string): Promise<Booking> {
-    const booking = await this.bookingRepository.findOne({
-      where: { id },
-      relations: ['user', 'showtime'],
-    });
-
-    if (!booking) {
-      throw new NotFoundException('Booking not found');
-    }
-
-    return booking;
   }
 }

@@ -84,7 +84,7 @@ export class MoviesService {
       throw new NotFoundException(`Movie with ID ${id} not found`);
     }
     Object.assign(movie, _updateMovieDto);
-    return await this.moviesRepository.save(movie);
+    await this.moviesRepository.save(movie);
   }
 
   async remove(id: number) {
@@ -92,6 +92,6 @@ export class MoviesService {
     if (!movie) {
       throw new NotFoundException(`Movie with ID ${id} not found`);
     }
-    return await this.moviesRepository.remove(movie);
+    await this.moviesRepository.remove(movie);
   }
 }

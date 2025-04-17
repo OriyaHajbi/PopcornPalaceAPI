@@ -2,6 +2,9 @@
 import { Booking } from 'src/booking/entities/booking.entity';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { Theater } from 'src/theater/entities/theater.entity';
+// import { Booking } from '../../booking/entities/booking.entity';
+// import { Movie } from '../../movies/entities/movie.entity';
+// import { Theater } from '../../theater/entities/theater.entity';
 import {
   Column,
   Entity,

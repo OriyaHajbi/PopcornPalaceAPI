@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+// import { Showtime } from '../../showtimes/entities/showtime.entity';
+
 import { Showtime } from 'src/showtimes/entities/showtime.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 

@@ -7,7 +7,10 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { Showtime } from 'src/showtimes/entities/showtime.entity';
+// import { Showtime } from '../../showtimes/entities/showtime.entity';
+
 import { User } from 'src/user/entities/user.entity';
+// import { User } from '../../user/entities/user.entity';
 
 @Entity('bookings')
 export class Booking {

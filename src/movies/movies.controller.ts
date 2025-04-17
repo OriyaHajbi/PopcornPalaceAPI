@@ -4,7 +4,6 @@ import {
   Get,
   Post,
   Body,
-  // Patch,
   Param,
   Delete,
   HttpCode,
@@ -34,27 +33,18 @@ export class MoviesController {
     return this.moviesService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-  //   return this.moviesService.update(+id, updateMovieDto);
-  // }
-
   @Post('update/:title')
   @HttpCode(200)
   updateByTitle(
     @Param('title') title: string,
     @Body() updateMovieDto: UpdateMovieDto,
   ) {
-    this.moviesService.updateByTitle(title, updateMovieDto);
+    return this.moviesService.updateByTitle(title, updateMovieDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.moviesService.remove(+id);
-  // }
   @Delete(':title')
   @HttpCode(200)
   removeByTitle(@Param('title') title: string) {
-    this.moviesService.removeByTitle(title);
+    return this.moviesService.removeByTitle(title);
   }
 }

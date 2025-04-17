@@ -1,5 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsInt, IsPositive, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsPositive,
+  IsNotEmpty,
+  Max,
+  Min,
+} from 'class-validator';
 
 /* eslint-disable prettier/prettier */
 export class CreateMovieDto {
@@ -15,6 +22,8 @@ export class CreateMovieDto {
   duration: number;
 
   @IsPositive()
+  @Min(0)
+  @Max(10)
   rating: number;
 
   @IsInt()
